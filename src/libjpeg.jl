@@ -497,11 +497,11 @@ function jpeg_destroy_decompress(cinfo)
 end
 
 function jpeg_stdio_dest(cinfo, outfile)
-    ccall((:jpeg_stdio_dest, libjpeg), Cvoid, (j_compress_ptr, Ptr{Cint}), cinfo, outfile)
+    ccall((:jpeg_stdio_dest, libjpeg), Cvoid, (j_compress_ptr, Ptr{Libc.FILE}), cinfo, outfile)
 end
 
 function jpeg_stdio_src(cinfo, infile)
-    ccall((:jpeg_stdio_src, libjpeg), Cvoid, (j_decompress_ptr, Ptr{Cint}), cinfo, infile)
+    ccall((:jpeg_stdio_src, libjpeg), Cvoid, (j_decompress_ptr, Ptr{Libc.FILE}), cinfo, infile)
 end
 
 function jpeg_mem_dest(cinfo, outbuffer, outsize)
