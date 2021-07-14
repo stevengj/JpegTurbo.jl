@@ -289,72 +289,72 @@ struct jpeg_destination_mgr
     term_destination::Ptr{Cvoid}
 end
 
-struct jpeg_compress_struct
-    err::Ptr{jpeg_error_mgr}
-    mem::Ptr{jpeg_memory_mgr}
-    progress::Ptr{jpeg_progress_mgr}
-    client_data::Ptr{Cvoid}
-    is_decompressor::boolean
-    global_state::Cint
-    dest::Ptr{jpeg_destination_mgr}
-    image_width::JDIMENSION
-    image_height::JDIMENSION
-    input_components::Cint
-    in_color_space::J_COLOR_SPACE
-    input_gamma::Cdouble
-    data_precision::Cint
-    num_components::Cint
-    jpeg_color_space::J_COLOR_SPACE
-    comp_info::Ptr{jpeg_component_info}
-    quant_tbl_ptrs::NTuple{4, Ptr{JQUANT_TBL}}
-    dc_huff_tbl_ptrs::NTuple{4, Ptr{JHUFF_TBL}}
-    ac_huff_tbl_ptrs::NTuple{4, Ptr{JHUFF_TBL}}
-    arith_dc_L::NTuple{16, UINT8}
-    arith_dc_U::NTuple{16, UINT8}
-    arith_ac_K::NTuple{16, UINT8}
-    num_scans::Cint
-    scan_info::Ptr{jpeg_scan_info}
-    raw_data_in::boolean
-    arith_code::boolean
-    optimize_coding::boolean
-    CCIR601_sampling::boolean
-    smoothing_factor::Cint
-    dct_method::J_DCT_METHOD
-    restart_interval::UInt32
-    restart_in_rows::Cint
-    write_JFIF_header::boolean
-    JFIF_major_version::UINT8
-    JFIF_minor_version::UINT8
-    density_unit::UINT8
-    X_density::UINT16
-    Y_density::UINT16
-    write_Adobe_marker::boolean
-    next_scanline::JDIMENSION
-    progressive_mode::boolean
-    max_h_samp_factor::Cint
-    max_v_samp_factor::Cint
-    total_iMCU_rows::JDIMENSION
-    comps_in_scan::Cint
-    cur_comp_info::NTuple{4, Ptr{jpeg_component_info}}
-    MCUs_per_row::JDIMENSION
-    MCU_rows_in_scan::JDIMENSION
-    blocks_in_MCU::Cint
-    MCU_membership::NTuple{10, Cint}
-    Ss::Cint
-    Se::Cint
-    Ah::Cint
-    Al::Cint
-    master::Ptr{jpeg_comp_master}
-    main::Ptr{jpeg_c_main_controller}
-    prep::Ptr{jpeg_c_prep_controller}
-    coef::Ptr{jpeg_c_coef_controller}
-    marker::Ptr{jpeg_marker_writer}
-    cconvert::Ptr{jpeg_color_converter}
-    downsample::Ptr{jpeg_downsampler}
-    fdct::Ptr{jpeg_forward_dct}
-    entropy::Ptr{jpeg_entropy_encoder}
-    script_space::Ptr{jpeg_scan_info}
-    script_space_size::Cint
+Base.@kwdef mutable struct jpeg_compress_struct
+    err::Ptr{jpeg_error_mgr} = C_NULL
+    mem::Ptr{jpeg_memory_mgr} = C_NULL
+    progress::Ptr{jpeg_progress_mgr} = C_NULL
+    client_data::Ptr{Cvoid} = C_NULL
+    is_decompressor::boolean = false
+    global_state::Cint = 0
+    dest::Ptr{jpeg_destination_mgr} = C_NULL
+    image_width::JDIMENSION = 0
+    image_height::JDIMENSION = 0
+    input_components::Cint = 0
+    in_color_space::J_COLOR_SPACE = JCS_UNKNOWN
+    input_gamma::Cdouble = 0
+    data_precision::Cint = 0
+    num_components::Cint = 0
+    jpeg_color_space::J_COLOR_SPACE = JCS_UNKNOWN
+    comp_info::Ptr{jpeg_component_info} = C_NULL
+    quant_tbl_ptrs::NTuple{4, Ptr{JQUANT_TBL}} = (C_NULL,C_NULL,C_NULL,C_NULL)
+    dc_huff_tbl_ptrs::NTuple{4, Ptr{JHUFF_TBL}} = (C_NULL,C_NULL,C_NULL,C_NULL)
+    ac_huff_tbl_ptrs::NTuple{4, Ptr{JHUFF_TBL}} = (C_NULL,C_NULL,C_NULL,C_NULL)
+    arith_dc_L::NTuple{16, UINT8} = ntuple(i -> 0x00, Val(16))
+    arith_dc_U::NTuple{16, UINT8} = ntuple(i -> 0x00, Val(16))
+    arith_ac_K::NTuple{16, UINT8} = ntuple(i -> 0x00, Val(16))
+    num_scans::Cint = 0
+    scan_info::Ptr{jpeg_scan_info} = C_NULL
+    raw_data_in::boolean = false
+    arith_code::boolean = false
+    optimize_coding::boolean = false
+    CCIR601_sampling::boolean = false
+    smoothing_factor::Cint = 0
+    dct_method::J_DCT_METHOD = JDCT_DEFAULT
+    restart_interval::UInt32 = 0
+    restart_in_rows::Cint = 0
+    write_JFIF_header::boolean = false
+    JFIF_major_version::UINT8 = 0
+    JFIF_minor_version::UINT8 = 0
+    density_unit::UINT8 = 0
+    X_density::UINT16 = 0
+    Y_density::UINT16 = 0
+    write_Adobe_marker::boolean = false
+    next_scanline::JDIMENSION = 0
+    progressive_mode::boolean = false
+    max_h_samp_factor::Cint = 0
+    max_v_samp_factor::Cint = 0
+    total_iMCU_rows::JDIMENSION = 0
+    comps_in_scan::Cint = 0
+    cur_comp_info::NTuple{4, Ptr{jpeg_component_info}} = (C_NULL,C_NULL,C_NULL,C_NULL)
+    MCUs_per_row::JDIMENSION = 0
+    MCU_rows_in_scan::JDIMENSION = 0
+    blocks_in_MCU::Cint = 0
+    MCU_membership::NTuple{10, Cint} = ntuple(i -> Cint(0), Val(10))
+    Ss::Cint = 0
+    Se::Cint = 0
+    Ah::Cint = 0
+    Al::Cint = 0
+    master::Ptr{jpeg_comp_master} = C_NULL
+    main::Ptr{jpeg_c_main_controller} = C_NULL
+    prep::Ptr{jpeg_c_prep_controller} = C_NULL
+    coef::Ptr{jpeg_c_coef_controller} = C_NULL
+    marker::Ptr{jpeg_marker_writer} = C_NULL
+    cconvert::Ptr{jpeg_color_converter} = C_NULL
+    downsample::Ptr{jpeg_downsampler} = C_NULL
+    fdct::Ptr{jpeg_forward_dct} = C_NULL
+    entropy::Ptr{jpeg_entropy_encoder} = C_NULL
+    script_space::Ptr{jpeg_scan_info} = C_NULL
+    script_space_size::Cint = 0
 end
 
 const j_compress_ptr = Ref{jpeg_compress_struct}
