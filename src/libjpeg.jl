@@ -21,6 +21,7 @@ using CEnum
             )
     run(wc)
 =#
+# ... plus some manual cleanup.
 
 ######################################################################################################
 
@@ -125,7 +126,7 @@ const JPOOL_NUMPOOLS = 2
 
 const JPEG_SUSPENDED = 0
 const JPEG_HEADER_OK = 1
-const JPEG_HEADER_TABLES_ONLY = 2
+const JPEG_HEADER_TABLES_O<NLY = 2
 const JPEG_REACHED_SOS = 1
 const JPEG_REACHED_EOI = 2
 const JPEG_ROW_COMPLETED = 3
@@ -356,7 +357,7 @@ struct jpeg_compress_struct
     script_space_size::Cint
 end
 
-const j_compress_ptr = Ptr{jpeg_compress_struct}
+const j_compress_ptr = Ref{jpeg_compress_struct}
 
 struct jpeg_source_mgr
     next_input_byte::Ptr{JOCTET}
@@ -368,98 +369,98 @@ struct jpeg_source_mgr
     term_source::Ptr{Cvoid}
 end
 
-struct jpeg_decompress_struct
-    err::Ptr{jpeg_error_mgr}
-    mem::Ptr{jpeg_memory_mgr}
-    progress::Ptr{jpeg_progress_mgr}
-    client_data::Ptr{Cvoid}
-    is_decompressor::boolean
-    global_state::Cint
-    src::Ptr{jpeg_source_mgr}
-    image_width::JDIMENSION
-    image_height::JDIMENSION
-    num_components::Cint
-    jpeg_color_space::J_COLOR_SPACE
-    out_color_space::J_COLOR_SPACE
-    scale_num::UInt32
-    scale_denom::UInt32
-    output_gamma::Cdouble
-    buffered_image::boolean
-    raw_data_out::boolean
-    dct_method::J_DCT_METHOD
-    do_fancy_upsampling::boolean
-    do_block_smoothing::boolean
-    quantize_colors::boolean
-    dither_mode::J_DITHER_MODE
-    two_pass_quantize::boolean
-    desired_number_of_colors::Cint
-    enable_1pass_quant::boolean
-    enable_external_quant::boolean
-    enable_2pass_quant::boolean
-    output_width::JDIMENSION
-    output_height::JDIMENSION
-    out_color_components::Cint
-    output_components::Cint
-    rec_outbuf_height::Cint
-    actual_number_of_colors::Cint
-    colormap::JSAMPARRAY
-    output_scanline::JDIMENSION
-    input_scan_number::Cint
-    input_iMCU_row::JDIMENSION
-    output_scan_number::Cint
-    output_iMCU_row::JDIMENSION
-    coef_bits::Ptr{NTuple{64, Cint}}
-    quant_tbl_ptrs::NTuple{4, Ptr{JQUANT_TBL}}
-    dc_huff_tbl_ptrs::NTuple{4, Ptr{JHUFF_TBL}}
-    ac_huff_tbl_ptrs::NTuple{4, Ptr{JHUFF_TBL}}
-    data_precision::Cint
-    comp_info::Ptr{jpeg_component_info}
-    progressive_mode::boolean
-    arith_code::boolean
-    arith_dc_L::NTuple{16, UINT8}
-    arith_dc_U::NTuple{16, UINT8}
-    arith_ac_K::NTuple{16, UINT8}
-    restart_interval::UInt32
-    saw_JFIF_marker::boolean
-    JFIF_major_version::UINT8
-    JFIF_minor_version::UINT8
-    density_unit::UINT8
-    X_density::UINT16
-    Y_density::UINT16
-    saw_Adobe_marker::boolean
-    Adobe_transform::UINT8
-    CCIR601_sampling::boolean
-    marker_list::jpeg_saved_marker_ptr
-    max_h_samp_factor::Cint
-    max_v_samp_factor::Cint
-    min_DCT_scaled_size::Cint
-    total_iMCU_rows::JDIMENSION
-    sample_range_limit::Ptr{JSAMPLE}
-    comps_in_scan::Cint
-    cur_comp_info::NTuple{4, Ptr{jpeg_component_info}}
-    MCUs_per_row::JDIMENSION
-    MCU_rows_in_scan::JDIMENSION
-    blocks_in_MCU::Cint
-    MCU_membership::NTuple{10, Cint}
-    Ss::Cint
-    Se::Cint
-    Ah::Cint
-    Al::Cint
-    unread_marker::Cint
-    master::Ptr{jpeg_decomp_master}
-    main::Ptr{jpeg_d_main_controller}
-    coef::Ptr{jpeg_d_coef_controller}
-    post::Ptr{jpeg_d_post_controller}
-    inputctl::Ptr{jpeg_input_controller}
-    marker::Ptr{jpeg_marker_reader}
-    entropy::Ptr{jpeg_entropy_decoder}
-    idct::Ptr{jpeg_inverse_dct}
-    upsample::Ptr{jpeg_upsampler}
-    cconvert::Ptr{jpeg_color_deconverter}
-    cquantize::Ptr{jpeg_color_quantizer}
+Base.@kwdef mutable struct jpeg_decompress_struct
+    err::Ptr{jpeg_error_mgr} = C_NULL
+    mem::Ptr{jpeg_memory_mgr} = C_NULL
+    progress::Ptr{jpeg_progress_mgr} = C_NULL
+    client_data::Ptr{Cvoid} = C_NULL
+    is_decompressor::boolean = false
+    global_state::Cint = 0
+    src::Ptr{jpeg_source_mgr} = C_NULL
+    image_width::JDIMENSION = 0
+    image_height::JDIMENSION = 0
+    num_components::Cint = 0
+    jpeg_color_space::J_COLOR_SPACE = JCS_UNKNOWN
+    out_color_space::J_COLOR_SPACE = JCS_UNKNOWN
+    scale_num::UInt32 = 0
+    scale_denom::UInt32 = 0
+    output_gamma::Cdouble = 0
+    buffered_image::boolean = false
+    raw_data_out::boolean = false
+    dct_method::J_DCT_METHOD = JDCT_DEFAULT
+    do_fancy_upsampling::boolean = false
+    do_block_smoothing::boolean = false
+    quantize_colors::boolean = false
+    dither_mode::J_DITHER_MODE = JDITHER_NONE
+    two_pass_quantize::boolean = false
+    desired_number_of_colors::Cint = 0
+    enable_1pass_quant::boolean = false
+    enable_external_quant::boolean = false
+    enable_2pass_quant::boolean = false
+    output_width::JDIMENSION = 0
+    output_height::JDIMENSION = 0
+    out_color_components::Cint = 0
+    output_components::Cint = 0
+    rec_outbuf_height::Cint = 0
+    actual_number_of_colors::Cint = 0
+    colormap::JSAMPARRAY = C_NULL
+    output_scanline::JDIMENSION = 0
+    input_scan_number::Cint = 0
+    input_iMCU_row::JDIMENSION = 0
+    output_scan_number::Cint = 0
+    output_iMCU_row::JDIMENSION = 0
+    coef_bits::Ptr{NTuple{64, Cint}} = C_NULL
+    quant_tbl_ptrs::NTuple{4, Ptr{JQUANT_TBL}} = (C_NULL,C_NULL,C_NULL,C_NULL)
+    dc_huff_tbl_ptrs::NTuple{4, Ptr{JHUFF_TBL}} = (C_NULL,C_NULL,C_NULL,C_NULL)
+    ac_huff_tbl_ptrs::NTuple{4, Ptr{JHUFF_TBL}} = (C_NULL,C_NULL,C_NULL,C_NULL)
+    data_precision::Cint = 0
+    comp_info::Ptr{jpeg_component_info} = C_NULL
+    progressive_mode::boolean = false
+    arith_code::boolean = false
+    arith_dc_L::NTuple{16, UINT8} = ntuple(i -> 0x00, Val(16))
+    arith_dc_U::NTuple{16, UINT8} = ntuple(i -> 0x00, Val(16))
+    arith_ac_K::NTuple{16, UINT8} = ntuple(i -> 0x00, Val(16))
+    restart_interval::UInt32 = 0
+    saw_JFIF_marker::boolean = false
+    JFIF_major_version::UINT8 = 0
+    JFIF_minor_version::UINT8 = 0
+    density_unit::UINT8 = 0
+    X_density::UINT16 = 0
+    Y_density::UINT16 = 0
+    saw_Adobe_marker::boolean = false
+    Adobe_transform::UINT8 = 0
+    CCIR601_sampling::boolean = false
+    marker_list::jpeg_saved_marker_ptr = C_NULL
+    max_h_samp_factor::Cint = 0
+    max_v_samp_factor::Cint = 0
+    min_DCT_scaled_size::Cint = 0
+    total_iMCU_rows::JDIMENSION = 0
+    sample_range_limit::Ptr{JSAMPLE} = C_NULL
+    comps_in_scan::Cint = 0
+    cur_comp_info::NTuple{4, Ptr{jpeg_component_info}} = (C_NULL,C_NULL,C_NULL,C_NULL)
+    MCUs_per_row::JDIMENSION = 0
+    MCU_rows_in_scan::JDIMENSION = 0
+    blocks_in_MCU::Cint = 0
+    MCU_membership::NTuple{10, Cint} = ntuple(i -> Cint(0), Val(10))
+    Ss::Cint = 0
+    Se::Cint = 0
+    Ah::Cint = 0
+    Al::Cint = 0
+    unread_marker::Cint = 0
+    master::Ptr{jpeg_decomp_master} = C_NULL
+    main::Ptr{jpeg_d_main_controller} = C_NULL
+    coef::Ptr{jpeg_d_coef_controller} = C_NULL
+    post::Ptr{jpeg_d_post_controller} = C_NULL
+    inputctl::Ptr{jpeg_input_controller} = C_NULL
+    marker::Ptr{jpeg_marker_reader} = C_NULL
+    entropy::Ptr{jpeg_entropy_decoder} = C_NULL
+    idct::Ptr{jpeg_inverse_dct} = C_NULL
+    upsample::Ptr{jpeg_upsampler} = C_NULL
+    cconvert::Ptr{jpeg_color_deconverter} = C_NULL
+    cquantize::Ptr{jpeg_color_quantizer} = C_NULL
 end
 
-const j_decompress_ptr = Ptr{jpeg_decompress_struct}
+const j_decompress_ptr = Ref{jpeg_decompress_struct}
 const jvirt_sarray_control = Cvoid
 const jvirt_sarray_ptr = Ptr{jvirt_sarray_control}
 const jvirt_barray_control = Cvoid
@@ -691,6 +692,14 @@ end
 function jpeg_read_icc_profile(cinfo, icc_data_ptr, icc_data_len)
     ccall((:jpeg_read_icc_profile, libjpeg), boolean, (j_decompress_ptr, Ptr{Ptr{JOCTET}}, Ptr{UInt32}), cinfo, icc_data_ptr, icc_data_len)
 end
+
+######################################################################################################
+# macros from jpeglib.h
+
+jpeg_create_compress(cinfo) =
+    jpeg_CreateCompress(cinfo, JPEG_LIB_VERSION, sizeof(jpeg_compress_struct))
+jpeg_create_decompress(cinfo) =
+    jpeg_CreateDecompress(cinfo, JPEG_LIB_VERSION, sizeof(jpeg_decompress_struct))
 
 ######################################################################################################
 
