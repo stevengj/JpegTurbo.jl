@@ -57,17 +57,7 @@ const jpeg_color_quantizer = Cvoid
 const JPEG_LIB_VERSION = 62
 const LIBJPEG_TURBO_VERSION = ".1."
 const LIBJPEG_TURBO_VERSION_NUMBER = 2001000
-const C_ARITH_CODING_SUPPORTED = 1
-const D_ARITH_CODING_SUPPORTED = 1
-const MEM_SRCDST_SUPPORTED = 1
-const WITH_SIMD = 1
 const BITS_IN_JSAMPLE = 8
-const HAVE_LOCALE_H = 1
-const HAVE_STDDEF_H = 1
-const HAVE_STDLIB_H = 1
-const NEED_SYS_TYPES_H = 1
-const HAVE_UNSIGNED_CHAR = 1
-const HAVE_UNSIGNED_SHORT = 1
 const MAX_COMPONENTS = 10
 
 # Skipping MacroDefinition: GETJOCTET ( value ) ( value )
@@ -80,16 +70,14 @@ const JPEG_MAX_DIMENSION = Int32(65500)
 # Skipping MacroDefinition: EXTERN ( type ) extern type
 # Skipping MacroDefinition: JMETHOD ( type , methodname , arglist ) type ( * methodname ) arglist
 
-const FALSE = 0
-const TRUE = 1
 const JCOEF = Int16
 const JOCTET = Cuchar
 const UINT8 = Cuchar
 const UINT16 = UInt32
 const INT16 = Int16
-const INT32 = Clong
+const INT32 = Int32
 const JDIMENSION = UInt32
-const boolean = Cint
+const boolean = Sys.iswindows() ? Cuchar : Cint
 const DCTSIZE = 8
 const DCTSIZE2 = 64
 const NUM_QUANT_TBLS = 4
