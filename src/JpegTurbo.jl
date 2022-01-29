@@ -1,5 +1,5 @@
 module JpegTurbo
 
-include("libjpeg.jl")
+include("C/jpeglib.jl")
 
 end
